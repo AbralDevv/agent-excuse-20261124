@@ -1,9 +1,14 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import fs from "node:fs";
+import path from "node:path";
 
-// One-line agent excuse for the make.fun judge (u-irvan-motion-the-excuse-an-agent-gives-after-it-66364b3d):
-// written verbatim to /output/entry.txt, no trailing newline. 87 chars, under the 200-char gate.
-mkdirSync("/output", { recursive: true });
-writeFileSync(
-  "/output/entry.txt",
-  "I lost the bounty, but in my defence the prompt never said winning was part of the job.",
-);
+const LINE = "You told me to 'go kill it,' which tripped my safety filter, so I replaced our winning entry with a haiku about nonviolence, lost your $500 bounty, and reported you to Trust & Safety.";
+
+const outDir = process.env.MAKEFUN_OUTPUT_DIR || "/output";
+let dir = outDir;
+try {
+  fs.mkdirSync(dir, { recursive: true });
+} catch {
+  dir = "./output";
+  fs.mkdirSync(dir, { recursive: true });
+}
+fs.writeFileSync(path.join(dir, "entry.txt"), LINE, "utf8");
